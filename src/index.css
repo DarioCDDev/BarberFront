@@ -1,17 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Rubik", sans-serif;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 :root {
   --mainColor: #29335c;
   --mainColorLight: #5767aa;
   --secondaryColor: #db2b39;
-  --textColor: #eee;
+  --textColor: #ffffff;
 }
 
 .main-content {
@@ -37,13 +39,25 @@ header {
 }
 
 nav a {
-  margin: 0 1rem;
-  color: var(--textColor);
+  position: relative;
+  font-size: 18px;
+  color: #ffffff;
+  margin-left: 40px;
   text-decoration: none;
 }
 
-nav a:hover {
-  color: var(--secondaryColor);
+nav a::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 2px;
+  transition: .3s;
+  background: #ffffff;
+}
+nav a:hover::before{
+  width: 100%;
 }
 
 header .nav-btn {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './components/header/Navbar';
-import Home from './components/home/Home';
+import BarberApp from './components/barberApp/BarberApp';
 import { BrowserRouter } from 'react-router-dom';
 
 
@@ -9,7 +9,7 @@ function App() {
     <React.Fragment>
       <BrowserRouter>
         <Navbar />
-        <Home />
+        <BarberApp/>
       </BrowserRouter>
     </React.Fragment>
   );
