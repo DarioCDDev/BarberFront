@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import PedirCitaServices from '../../services/pedirCita.service';
 import './PedirCita.css';
-import barberImage from '../../assets/barber.webp';
+import { useNavigate } from 'react-router-dom';
 
 const PedirCita = () => {
   const [barbers, setBarbers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchBarbers() {
       try {
         const data = await PedirCitaServices.getAllBarbers();
         setBarbers(data.data);
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -24,11 +24,11 @@ const PedirCita = () => {
       <div className='container'>
         {barbers?.map((barber, index) => (
           <>
-          <div className="card" key={index}>
-            <img alt='Foto del barbero' src={barberImage} />
-          </div>
+            <div className="card" key={index} onClick={() =>  navigate(`/pedirCita/${barber.userId}/calendar`)}>
+              <img alt={`Foto del barber ${barber.name}`} src={`data:image/jpeg;base64,${barber.photo}`} />
+            </div>
           </>
-          
+
         ))}
       </div>
     </div>

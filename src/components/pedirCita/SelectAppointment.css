@@ -1,0 +1,18 @@
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  padding: 20px;
+  flex-direction: column;
+}
+
+.calendar-container {
+  width: 100%; /* Hace que el calendario ocupe todo el ancho disponible */
+  max-width: 1200px; /* Opcional: Limita el ancho máximo para evitar que se extienda demasiado */
+}
+
+.react-calendar {
+  width: 100%;
+  height: auto;
+}
