@@ -19,6 +19,7 @@ function Navbar() {
         <Link to={"/"} onClick={closeNavbar}>Inicio</Link>
         <Link to={"/pedirCita"} onClick={closeNavbar}>Pedir cita</Link>
         <Link to={"/contacto"} onClick={closeNavbar}>Contacto</Link>
+        <Link to={"/login"} onClick={closeNavbar}>Inicir Sesión</Link>
         <button
           className="nav-btn nav-close-btn"
           onClick={showNavbar}>

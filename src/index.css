@@ -80,6 +80,23 @@ nav {
   align-items: center;
 }
 
+/* LOGIN */
+
+.loginContainer {
+  background-image: var(--fondoImg);
+  height: 105vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formularioLogin {
+  padding: 50px;
+  background-color: var(--fondo);
+}
+
+
 
 @media only screen and (max-width: 1024px) {
   header .nav-btn {

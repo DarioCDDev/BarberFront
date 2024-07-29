@@ -14,6 +14,7 @@ const SelectAppointment = () => {
   const navigate = useNavigate();
 
   const getBarberCalendar = async (id) => {
+    console.log(id);
     try {
       const response = await PedirCitaServices.getBarberCalendar(id);
       setAvailableTimes(response.data.availableTimes);

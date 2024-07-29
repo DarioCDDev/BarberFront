@@ -8,7 +8,7 @@ const getAllBarbers = async() => {
       rolId: 1
     },
     headers: {
-      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb0pXVEBnYW1pbC5jb20iLCJleHAiOjE3MjIyNjQwMjUsInJvbElkIjp7ImlkUm9sIjoxLCJuYW1lIjoiQmFyYmVybyJ9LCJub21icmUiOiJEYXJpb0pXVCJ9.Tlwd1pmRCXMVXt9R8r78B6Wo7Zn1k3bBUyvcqe1cMHkqHd3XX_PQStqmdLj2ekJPGTLuvQWlJQfDnNOtejD3hQ`
+      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb2NkMDgwOEBnYW1pbC5jb20iLCJleHAiOjE3MjI1NDE0NjAsInJvbElkIjp7ImlkUm9sIjoyLCJuYW1lIjoiQ2xpZW50ZSJ9LCJub21icmUiOiJEYXJpbyJ9.Xy7RBfZaPhxKrVWGUugmzxfuuWQMxe1e2ENj16yYjn5CBr8QgsfQWnaiqmRZaPYOrFLfIrmsV-zuhwkuh4hYnA`
     }
   });
   return response
@@ -20,7 +20,7 @@ const getBarberCalendar = async(id) => {
       barberId: id
     },
     headers: {
-      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb0pXVEBnYW1pbC5jb20iLCJleHAiOjE3MjIyNjQwMjUsInJvbElkIjp7ImlkUm9sIjoxLCJuYW1lIjoiQmFyYmVybyJ9LCJub21icmUiOiJEYXJpb0pXVCJ9.Tlwd1pmRCXMVXt9R8r78B6Wo7Zn1k3bBUyvcqe1cMHkqHd3XX_PQStqmdLj2ekJPGTLuvQWlJQfDnNOtejD3hQ`
+      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb2NkMDgwOEBnYW1pbC5jb20iLCJleHAiOjE3MjI1NDE0NjAsInJvbElkIjp7ImlkUm9sIjoyLCJuYW1lIjoiQ2xpZW50ZSJ9LCJub21icmUiOiJEYXJpbyJ9.Xy7RBfZaPhxKrVWGUugmzxfuuWQMxe1e2ENj16yYjn5CBr8QgsfQWnaiqmRZaPYOrFLfIrmsV-zuhwkuh4hYnA`
     }
   });
   return response
@@ -29,7 +29,7 @@ const getBarberCalendar = async(id) => {
 const getBarber = async(id) => {
   const response = await axios.get(`${API_URL}/user/${id}`, {
     headers: {
-      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb0pXVEBnYW1pbC5jb20iLCJleHAiOjE3MjIyNjQwMjUsInJvbElkIjp7ImlkUm9sIjoxLCJuYW1lIjoiQmFyYmVybyJ9LCJub21icmUiOiJEYXJpb0pXVCJ9.Tlwd1pmRCXMVXt9R8r78B6Wo7Zn1k3bBUyvcqe1cMHkqHd3XX_PQStqmdLj2ekJPGTLuvQWlJQfDnNOtejD3hQ`
+      'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJpb2NkMDgwOEBnYW1pbC5jb20iLCJleHAiOjE3MjI1NDE0NjAsInJvbElkIjp7ImlkUm9sIjoyLCJuYW1lIjoiQ2xpZW50ZSJ9LCJub21icmUiOiJEYXJpbyJ9.Xy7RBfZaPhxKrVWGUugmzxfuuWQMxe1e2ENj16yYjn5CBr8QgsfQWnaiqmRZaPYOrFLfIrmsV-zuhwkuh4hYnA`
     }
   });
   return response
