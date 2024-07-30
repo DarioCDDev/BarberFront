@@ -2,8 +2,6 @@ import axios from 'axios';
 import { API_URL } from './apiUrl';
 
 const login = async (data) => {
-  console.log(data.email);
-  console.log(data.password);
   try {
     const response = await axios.post(`${API_URL}/login`, {
       email: data.email,
@@ -28,9 +26,34 @@ const login = async (data) => {
   }
 };
 
+const register = async (data) => {
+  console.log(data);
+  try {
+    const response = await axios.post(`${API_URL}/register`, {
+      rol_id: 2,
+      user: {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone
+      },
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    if(response.status === 200) {
+      await login(data);
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 const UserServices = {
   login,
+  register
 };
 
 export default UserServices;

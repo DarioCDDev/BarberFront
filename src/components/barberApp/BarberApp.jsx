@@ -6,6 +6,7 @@ import Contacto from "../contacto/Contacto"
 import SelectAppointment from '../pedirCita/SelectAppointment';
 import { NotFound } from '../notFound/NotFound';
 import Login from '../login/Login';
+import Register from '../register/Register';
 
 const BarberApp = () => {
 
@@ -18,6 +19,7 @@ const BarberApp = () => {
         <Route path="/pedirCita/:idBarber/calendar" element={<SelectAppointment />}></Route>
         <Route path="/contacto" element={<Contacto />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
 
