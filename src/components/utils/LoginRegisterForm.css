@@ -100,6 +100,11 @@
   outline: none;
   color: #ffffff;
   cursor: pointer;
+  transition: transform 0.3s ease; 
+}
+
+.sign-in_btn:hover {
+  transform: scale(1.1);
 }
 
 .sign-in_ggl {
@@ -131,9 +136,17 @@
   outline: none;
   color: #ffffff;
   border: 1px solid #e5e5e5;
-  filter: drop-shadow(0px 1px 0px #efefef)
-    drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+  filter: drop-shadow(0px 1px 0px #efefef) drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
   cursor: pointer;
+  transition: transform 0.3s ease; /* Añadir transición para una animación suave */
+}
+
+.sign-in_apl:hover {
+  transform: scale(1.1); /* Usar transform en lugar de scale directamente */
+}
+
+.sign-in_apl:hover a{
+  color: white;
 }
 
 .separator {
@@ -164,4 +177,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.registerLink{
+  text-decoration: none;
+  cursor: pointer;
+  color: #e8e8e8;
 }
