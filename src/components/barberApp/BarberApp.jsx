@@ -10,13 +10,16 @@ import Register from '../register/Register';
 
 const BarberApp = () => {
 
+  const TOKEN = localStorage.getItem("token")
+  
+
 
   return (
     <div>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/pedirCita" element={<PedirCita />}></Route>
-        <Route path="/pedirCita/:idBarber/calendar" element={<SelectAppointment />}></Route>
+        <Route path="/pedirCita" element={<PedirCita token={TOKEN} />}></Route>
+        <Route path="/pedirCita/:idBarber/calendar" element={<SelectAppointment token={TOKEN}/>}></Route>
         <Route path="/contacto" element={<Contacto />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>

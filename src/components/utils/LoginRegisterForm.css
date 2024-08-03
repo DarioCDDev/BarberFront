@@ -17,6 +17,7 @@
   font-family: "Inter", sans-serif;
 }
 
+
 .logo_container {
   box-sizing: border-box;
   width: 80px;
@@ -37,6 +38,7 @@
 
 .title {
   margin: 0;
+  text-align: center;
   font-size: 1.25rem;
   font-weight: 700;
   color: #212121;
@@ -197,6 +199,7 @@
   font-size: 0.8rem;
   color: #8B8E98;
   text-decoration: underline;
+  text-align: center;
 }
 
 .formContainer{
@@ -219,4 +222,10 @@
 .badge_message {
   color: red; /* Cambia el color según el tipo de mensaje */
   font-size: 0.9em; /* Ajusta el tamaño de la fuente */
+}
+
+@media only screen and (max-width: 1024px) {
+  .formContainerRegister{
+    height: 130vh;
+  }
 }

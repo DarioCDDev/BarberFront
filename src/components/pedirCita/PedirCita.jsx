@@ -3,14 +3,15 @@ import PedirCitaServices from '../../services/pedirCita.service';
 import './PedirCita.css';
 import { useNavigate } from 'react-router-dom';
 
-const PedirCita = () => {
+const PedirCita = ({token}) => {
   const [barbers, setBarbers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchBarbers() {
       try {
-        const data = await PedirCitaServices.getAllBarbers();
+        console.log(token);
+        const data = await PedirCitaServices.getAllBarbers(token);
         setBarbers(data.data);
       } catch (error) {
         console.log(error);
