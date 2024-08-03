@@ -1,30 +1,56 @@
 import React, { useState } from 'react'
 import UserServices from '../../services/user.service';
 import { Link } from 'react-router-dom';
+import LoginRegisterForm from '../utils/LoginRegisterForm';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
-  
+
   const iconoLogin = require("../../assets/user.png")
   const initialInputsData = {
     email: "",
-    name : "",
+    name: "",
     password: "",
+    confirmPassword: "",
     phone: ""
   };
 
   const [inputsData, setinputsData] = useState(initialInputsData);
+  const [emailError, setEmailError] = useState(false);
 
   const handleOnChange = (e) => {
     setinputsData({
       ...inputsData,
       [e.target.name]: e.target.value,
     });
+    if (e.target.name === "name") {
+      setEmailError(false)
+    }
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
     async function checkUsuario() {
       try {
+        if (inputsData.password !== inputsData.confirmPassword) {
+          console.log("no es igual");
+          toast.error('Las contraseñas no coinciden', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+          return;
+        }
+        if (inputsData.name === "" || inputsData.name === null || inputsData.name === undefined ) {
+          setEmailError(true);
+          return
+        }
         console.log(inputsData);
         const response = await UserServices.register(inputsData);
         console.log(response);
@@ -38,80 +64,8 @@ const Register = () => {
 
   return (
     <>
-      <div className="loginContainer">
-        <form className="formularioLogin" onSubmit={handleOnSubmit}>
-          <div>
-            <label htmlFor="email" className="text-secondary">
-              EMAIL
-            </label>
-            <div>
-              <input id="email" name="email" type="email" placeholder="" required="" className="formularioLoginInput" onChange={handleOnChange} />
-            </div>
-          </div>
-          <div className="">
-            <label htmlFor="name" className="text-secondary">
-              Nombre
-            </label>
-            <div>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder=""
-                required=""
-                className="formularioLoginInput"
-                onChange={handleOnChange}
-              />
-            </div>
-          </div>
-          <div className="">
-            <label htmlFor="phone" className="text-secondary">
-              Teléfono
-            </label>
-            <div>
-              <input
-                id="phone"
-                name="phone"
-                type="number"
-                placeholder=""
-                required=""
-                className="formularioLoginInput"
-                onChange={handleOnChange}
-              />
-            </div>
-          </div>
-
-          <div className="">
-            <label htmlFor="password" className="text-secondary">
-              CONTRASEÑA
-            </label>
-            <div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder=""
-                required=""
-                className="formularioLoginInput"
-                onChange={handleOnChange}
-              />
-            </div>
-          </div>
-          <div>
-            <button type="submit" className="btn btn-primary mt-4 w-100">
-              <img className="iconoBotonLogin mr-5" src={iconoLogin} alt="" />
-              <b style={{ color: "white" }}>INICIAR SESIÓN</b>
-            </button>
-          </div>
-          <hr />
-          <div className="text-center">
-            <p className="mb-0">¿Todavia no tienes cuenta?</p>
-            <Link to={"/login"} className="registerLink">
-              <b>login aquí</b>
-            </Link>
-          </div>
-        </form>
-      </div>
+      <ToastContainer/>
+      <LoginRegisterForm option={"register"} handleOnChange={handleOnChange} handleOnSubmit={handleOnSubmit} emailError={emailError}/>
     </>
   );
 }

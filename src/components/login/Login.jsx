@@ -23,6 +23,7 @@ const Login = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     async function checkUsuario() {
+      console.log(inputsData);
       try {
         const response = await UserServices.login(inputsData);
         console.log(response);
@@ -35,51 +36,7 @@ const Login = () => {
   };
 
   return (
-    // <>
-    //   <div className="loginContainer">
-    //     <form className="formularioLogin" onSubmit={handleOnSubmit}>
-    //       <div>
-    //         <label htmlFor="email" className="text-secondary">
-    //           EMAIL
-    //         </label>
-    //         <div>
-    //           <input id="email" name="email" type="email" placeholder="" required="" className="formularioLoginInput" onChange={handleOnChange} />
-    //         </div>
-    //       </div>
-
-    //       <div className="">
-    //         <label htmlFor="password" className="text-secondary">
-    //           CONTRASEÑA
-    //         </label>
-    //         <div>
-    //           <input
-    //             id="password"
-    //             name="password"
-    //             type="password"
-    //             placeholder=""
-    //             required=""
-    //             className="formularioLoginInput"
-    //             onChange={handleOnChange}
-    //           />
-    //         </div>
-    //       </div>
-    //       <div>
-    //         <button type="submit" className="btn btn-primary mt-4 w-100">
-    //           <img className="iconoBotonLogin mr-5" src={iconoLogin} alt="" />
-    //           <b style={{ color: "white" }}>INICIAR SESIÓN</b>
-    //         </button>
-    //       </div>
-    //       <hr />
-    //       <div className="text-center">
-    //         <p className="mb-0">¿Todavia no tienes cuenta?</p>
-    //         <Link to={"/register"} className="registerLink">
-    //           <b>Resgistrate aquí</b>
-    //         </Link>
-    //       </div>
-    //     </form>
-    //   </div>
-    // </>
-    <LoginRegisterForm/>
+    <LoginRegisterForm option={"login"} handleOnChange={handleOnChange} handleOnSubmit={handleOnSubmit} />
   );
 }
 
