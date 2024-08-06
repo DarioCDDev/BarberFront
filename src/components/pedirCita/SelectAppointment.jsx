@@ -6,8 +6,12 @@ import PedirCitaServices from '../../services/pedirCita.service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import ClipLoader from "react-spinners/ClipLoader";
+import UserServices from '../../services/user.service';
+import { toast } from 'react-toastify';
+import formatDateInSpanish from "../utils/formatDateInSpanish"
+import convertToISO8601 from "../utils/convertToISO8601"
 
-const SelectAppointment = ({ token }) => {
+const SelectAppointment = ({ token, user }) => {
   const { idBarber } = useParams();
   const [availability, setAvailability] = useState({});
   const [dates, setDates] = useState([]);
@@ -31,23 +35,28 @@ const SelectAppointment = ({ token }) => {
       await PedirCitaServices.getBarberCalendar(id, token).then((response) => {
         setDates(response.data.dateTimestamps.map(date => new Date(date)));
         setAvailability(response.data.availability);
-
       }).then((error) => {
 
       }).finally(() => {
         setIsLoading(false)
       });
     } catch (error) {
-      console.log(error);
+
+      if (error.response.status === 401) {
+        navigate("/pedirCita")
+      }
     }
   }
 
   const getBarber = async (id) => {
     try {
       const response = await PedirCitaServices.getBarber(id, token);
+      console.log(response.data);
       setBarber(response.data);
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 401) {
+        navigate("/pedirCita")
+      }
     }
   }
 
@@ -63,6 +72,7 @@ const SelectAppointment = ({ token }) => {
   const handleDateChange = (date) => {
     console.log("cambios");
     setSelectedDate(date);
+    console.log(date);
     displayHoursToGetAppointment(date); // Muestra las horas al seleccionar la fecha
     clearData()
   };
@@ -85,26 +95,100 @@ const SelectAppointment = ({ token }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const formatDateInSpanish = (date) => {
-    if (!date) return "";
-    
-    // Definir los nombres de los días y meses en español
-    const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-    
-    const dayOfWeek = daysOfWeek[date.getDay()];
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    
-    return `${dayOfWeek}, ${day} de ${month} de ${year}`;
-  };
-
   const handleCardClick = (index, time) => {
     console.log(time);
     setSelectedCard(index);
     setSelectedHour(time)
   };
+
+  const handleOnSubmitAppointment = async (e) => {
+    e.preventDefault();
+    if ((selectedDate === "" || selectedDate === null || selectedDate === undefined) || (selectedHour === "" || selectedHour === null || selectedHour === undefined)) {
+      toast.error(`Para poder crear la cita tiene que seleccionar fecha y hora`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+    try {
+      setIsLoading(true)
+      const isoFormattedDate = convertToISO8601(selectedDate, selectedHour);
+
+      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, token).then((response) => {
+        navigate("/")
+        toast.success(`Cita creada con éxito, no vemos pronto 🙂`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }).catch((error) => {
+        if (error.response.status === 401) {
+          navigate("/login")
+          toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        if (error.response.status === 400) {
+          toast.warning(`${error.response.data.message}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }).finally(() => {
+        setIsLoading(false)
+      });
+    } catch (error) {
+      if (error.response.status === 401) {
+        navigate("/login")
+        toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+      if (error.response.status === 400) {
+        toast.warning(`${error.response.data.message}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
+  }
 
   return (
     <>
@@ -148,6 +232,9 @@ const SelectAppointment = ({ token }) => {
                   </div>
                 </div>
               </div>
+              <button onClick={(e) => handleOnSubmitAppointment(e)}>
+                hola
+              </button>
               {hours.length > 0 ? (
                 <div className='cardContainer'>
                   {hours.map((slot, index) => (

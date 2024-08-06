@@ -5,7 +5,7 @@ import LoginRegisterForm from '../utils/LoginRegisterForm';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Register = () => {
+const Register = ({setToken}) => {
   const initialInputsData = {
     email: "",
     name: "",
@@ -89,7 +89,7 @@ const Register = () => {
           return
         }
         console.log(inputsData);
-        await UserServices.register(inputsData).then((response) => {
+        await UserServices.register(inputsData, setToken).then((response) => {
           toast.success(`Cuenta creada correctamente`, {
             position: "top-right",
             autoClose: 2000,

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PedirCitaServices from '../../services/pedirCita.service';
 import './PedirCita.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const PedirCita = ({token}) => {
   const [barbers, setBarbers] = useState([]);
@@ -10,11 +11,22 @@ const PedirCita = ({token}) => {
   useEffect(() => {
     async function fetchBarbers() {
       try {
-        console.log(token);
-        const data = await PedirCitaServices.getAllBarbers(token);
-        setBarbers(data.data);
+        const response = await PedirCitaServices.getAllBarbers(token);
+        setBarbers(response.data);
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 401) {
+          navigate("/login")
+          toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       }
     }
     fetchBarbers();

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LoginRegisterForm from '../utils/LoginRegisterForm';
 import { toast } from 'react-toastify';
 
-const Login = () => {
+const Login = ({setToken}) => {
 
   const navigate = useNavigate();
 
@@ -33,7 +33,6 @@ const Login = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     async function checkUsuario() {
-      console.log(inputsData);
       try {
         let error = false
         if (inputsData.email === "" || inputsData.email === null || inputsData.email === undefined) {
@@ -46,7 +45,7 @@ const Login = () => {
         }
         if (error) {
           return
-        }await UserServices.login(inputsData).then((response) => {
+        }await UserServices.login(inputsData, setToken).then((response) => {
           toast.success(`Se ha iniciado sesión correctamente`, {
             position: "top-right",
             autoClose: 2000,
@@ -57,7 +56,7 @@ const Login = () => {
             progress: undefined,
             theme: "light",
           });
-          navigate("/")
+          navigate("/");
         }).catch((error) => {
           toast.error(`El correo o la contraseña no son correctos`, {
             position: "top-right",
