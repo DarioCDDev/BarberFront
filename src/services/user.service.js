@@ -104,13 +104,14 @@ const uploadPhoto = async (photo, userId, token) => {
   }
 };
 
-const getPhoto = (userId, token) => {
-  return axios.get(`${API_URL}/${userId}/photo`, {
+const getPhoto = async (userId, token) => {
+  const response = await axios.get(`${API_URL}/${userId}/photo`, {
     headers: {
       'Authorization': `Bearer ${token}`
     },
     responseType: 'arraybuffer' // Importante para recibir datos binarios
   });
+  return response
 };
 
 

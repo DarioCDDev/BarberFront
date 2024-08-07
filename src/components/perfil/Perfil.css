@@ -6,6 +6,7 @@
 }
 
 .photoProfile {
+  cursor: pointer;
   width: 250px;
   height: 250px;
   border-radius: 50%;
@@ -20,16 +21,51 @@
   justify-content: center;
 }
 
-.infoProfile p{
+.infoProfile div:nth-child(2) {
+  display: flex;
+    justify-content: space-evenly;
+}
+.sign-in_apl-profile{
+  width: auto;
+  padding-inline: 30px;
+  background-color: #c91d1d;
+}
+.sign-in_btn-profile{
+  width: auto;
+  padding-inline: 30px;
+}
+
+.infoProfile p {
   font-size: 1.2rem;
 }
-.infoProfile span{
+
+.infoProfile span {
   font-weight: 600;
 }
 
 @media only screen and (max-width: 1024px) {
-  .profileContainer{
+  .profileContainer {
     flex-direction: column;
     align-items: center;
   }
+
+  .infoProfile div:nth-child(1) {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .infoProfile div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .infoProfile div:nth-child(1) > p {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
 }

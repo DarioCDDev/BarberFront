@@ -50,6 +50,7 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
                 </>
             }
           </div>
+          
         }
         <div className="input_container">
           {
