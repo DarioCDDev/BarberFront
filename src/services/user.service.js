@@ -42,7 +42,7 @@ const register = async (data, setToken) => {
         "Content-type": "application/json",
       },
     });
-    if(response.status === 200) {
+    if (response.status === 200) {
       await login(data, setToken);
     }
     return response;
@@ -51,7 +51,7 @@ const register = async (data, setToken) => {
   }
 }
 
-const getUserDataWithToken = async(token) => {
+const getUserDataWithToken = async (token) => {
   try {
     const response = await axios.get(`${API_URL}/user/token`, {
       params: {
@@ -68,7 +68,7 @@ const getUserDataWithToken = async(token) => {
   }
 }
 
-const getActiveAppointments = async(user, token) => {
+const getActiveAppointments = async (user, token) => {
   try {
     const response = await axios.get(`${API_URL}/appointments/client`, {
       params: {
@@ -84,12 +84,45 @@ const getActiveAppointments = async(user, token) => {
   }
 }
 
+const uploadPhoto = async (photo, userId, token) => {
+  try {
+    const formData = new FormData();
+    formData.append('photo', photo);
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      }
+    };
+
+
+    const response = await axios.post(`${API_URL}/${userId}/photo`, formData, config);
+
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getPhoto = (userId, token) => {
+  return axios.get(`${API_URL}/${userId}/photo`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    responseType: 'arraybuffer' // Importante para recibir datos binarios
+  });
+};
+
+
+
 
 const UserServices = {
   login,
   register,
   getUserDataWithToken,
-  getActiveAppointments
+  getActiveAppointments,
+  uploadPhoto,
+  getPhoto
 };
 
 export default UserServices;

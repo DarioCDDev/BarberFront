@@ -231,10 +231,10 @@ const SelectAppointment = ({ token, user }) => {
                     <span>{`${selectedHour || "Sin seleccionar"}`}</span>
                   </div>
                 </div>
+              <Button className='btnConfirm' onClick={(e) => handleOnSubmitAppointment(e)}>
+                Confrimar cita
+              </Button>
               </div>
-              <button onClick={(e) => handleOnSubmitAppointment(e)}>
-                hola
-              </button>
               {hours.length > 0 ? (
                 <div className='cardContainer'>
                   {hours.map((slot, index) => (

@@ -22,31 +22,28 @@ const MisCitas = ({ token, user }) => {
   }, [])
 
   return (
-    /* From Uiverse.io by kamehame-ha */
-    <div className="main-content">
-      <div className="cards">
-        {appointments.map((appointment, index) => {
-          if (appointment.status.idStatus === 1) {
-            return (
-              <div key={index} className="card green">
-                <p className="tip">Dia: {formatDateInSpanish(appointment.appointmentTime)}, a las {appointment.appointmentTime.slice(11, 16)}</p>
-                <p className="tip">Barbero: {appointment.barber.name}</p>
-                <div>
-                  <p className="second-text">Teléfono: {appointment.barber.phone}</p>
-                  <p className="second-text">Correo: {appointment.barber.email}</p>
-                </div>
+    <div className="cards">
+      {appointments.map((appointment, index) => {
+        if (appointment.status.idStatus === 1) {
+          return (
+            <div key={index} className="card green">
+              <p className="tip">Dia: {formatDateInSpanish(appointment.appointmentTime)}, a las {appointment.appointmentTime.slice(11, 16)}</p>
+              <p className="tip">Barbero: {appointment.barber.name}</p>
+              <div>
+                <p className="second-text">Teléfono: {appointment.barber.phone}</p>
+                <p className="second-text">Correo: {appointment.barber.email}</p>
               </div>
-            )
-          } else {
-            return (
-              <div key={index} className="card red">
-                <p className="tip">Fecha : {formatDateInSpanish(appointment.appointmentTime)}</p>
-                <p className="second-text">Lorem Ipsum</p>
-              </div>
-            )
-          }
-        })}
-      </div>
+            </div>
+          )
+        } else {
+          return (
+            <div key={index} className="card red">
+              <p className="tip">Fecha : {formatDateInSpanish(appointment.appointmentTime)}</p>
+              <p className="second-text">Lorem Ipsum</p>
+            </div>
+          )
+        }
+      })}
     </div>
   )
 }

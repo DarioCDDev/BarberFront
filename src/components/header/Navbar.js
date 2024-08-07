@@ -1,8 +1,12 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ user }) {
+  useEffect(() => {
+    console.log("user", user);
+  }, [])
+
   const navRef = useRef();
 
   const showNavbar = () => {
@@ -18,8 +22,13 @@ function Navbar() {
       <nav ref={navRef}>
         <Link to={"/"} onClick={closeNavbar}>Inicio</Link>
         <Link to={"/pedirCita"} onClick={closeNavbar}>Pedir cita</Link>
-        <Link to={"/citas"} onClick={closeNavbar}>Mis citas</Link>
-        <Link to={"/login"} onClick={closeNavbar}>Inicir Sesión</Link>
+        {/* <Link to={"/citas"} onClick={closeNavbar}>Mis citas</Link> */}
+        {user.sub 
+        ? 
+        <Link to={"/perfil"} onClick={closeNavbar}>Perfil</Link> 
+        : 
+        <Link to={"/login"} onClick={closeNavbar}>Iniciar Sesión</Link>}
+
         <button
           className="nav-btn nav-close-btn"
           onClick={showNavbar}>

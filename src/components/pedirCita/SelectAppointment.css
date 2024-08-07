@@ -88,8 +88,17 @@
 }
 
 .finalCard{
+  cursor: auto;
   padding-block: 10px;
   margin-bottom: 10px;
+}
+.btnConfirm {
+  padding-top: 10px;
+  transition: transform 0.3s ease;
+}
+
+.btnConfirm:hover {
+  transform: scale(1.05);
 }
 
 .finalCard span:first-child{

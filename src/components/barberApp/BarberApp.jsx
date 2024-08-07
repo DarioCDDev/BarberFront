@@ -9,6 +9,8 @@ import Login from '../login/Login';
 import Register from '../register/Register';
 import UserServices from '../../services/user.service';
 import MisCitas from '../misCitas/MisCitas';
+import Navbar from '../header/Navbar';
+import { Perfil } from '../perfil/Perfil';
 
 const BarberApp = () => {
   const [token, setToken] = useState(null);
@@ -39,13 +41,22 @@ const BarberApp = () => {
 
   return (
     <div>
+      <Navbar user={user}/>
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/pedirCita" element={<PedirCita token={token} />}></Route>
-        <Route path="/pedirCita/:idBarber/calendar" element={<SelectAppointment token={token} user={user}/>}></Route>
-        <Route path="/citas" element={<MisCitas token={token} user={user}/>}></Route>
-        <Route path="/login" element={<Login setToken={setToken}/>}></Route>
-        <Route path="/register" element={<Register setToken={setToken}/>}></Route>
+        <Route path="/pedirCita/:idBarber/calendar" element={<SelectAppointment token={token} user={user} />}></Route>
+        <Route path="/citas" element={<MisCitas token={token} user={user} />}></Route>
+        {user.sub ?
+          <>
+            <Route path="/perfil" element={<Perfil setToken={setToken} user={user} token={token} setUser={setUser} />}></Route>
+          </>
+          :
+          <>
+            <Route path="/login" element={<Login setToken={setToken} />}></Route>
+            <Route path="/register" element={<Register setToken={setToken} />}></Route>
+          </>
+        }
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
