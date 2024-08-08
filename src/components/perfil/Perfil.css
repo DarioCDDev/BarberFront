@@ -43,6 +43,18 @@
   font-weight: 600;
 }
 
+.inputField{
+  margin-left: 10px;
+  padding-left: 5px;
+  width: 50%;
+}
+.disabledbtn{
+  cursor: not-allowed;
+  background-color: #c4cfff;
+  color: white;
+}
+
+
 @media only screen and (max-width: 1024px) {
   .profileContainer {
     flex-direction: column;

@@ -114,6 +114,34 @@ const getPhoto = async (userId, token) => {
   return response
 };
 
+const updateUser = async (userId, data, token) => {
+
+
+  const responseData = {
+    user: {
+      name: data.name,
+      phone: data.phone,
+      password: data.password
+    },
+    newPassword: data.confirmPassword,
+  }
+
+  try {
+
+    const response = await axios.put(`${API_URL}/user/${userId}`, responseData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    console.log(response);
+
+    return response;
+  }
+  catch (error) {
+    return error;
+  }
+}
+
 
 
 
@@ -123,7 +151,8 @@ const UserServices = {
   getUserDataWithToken,
   getActiveAppointments,
   uploadPhoto,
-  getPhoto
+  getPhoto,
+  updateUser
 };
 
 export default UserServices;

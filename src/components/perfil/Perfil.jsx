@@ -11,19 +11,32 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
 
   const defaultUserPhoto = require("../../assets/defaultUserPhoto.png");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [userPhoto, setUserPhoto] = useState(defaultUserPhoto); // Establecer foto por defecto
-  const [isEditing, setIsEditing] = useState(false); // Estado para controlar si estamos en modo edición
+  const [userPhoto, setUserPhoto] = useState(defaultUserPhoto);
+  const [isEditing, setIsEditing] = useState(false);
   const [originalUserData, setOriginalUserData] = useState({
     name: user.name,
     phone: user.phone
   });
   const [inputDataEdit, setInputDataEdit] = useState({
     name: user.name,
-    phone: user.phone
+    phone: user.phone,
+    confirmPassword: "",
+    password: ""
   });
+
+  const [changes, setChanges] = useState(false);
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const celarInputs = () => {
+    setInputDataEdit({
+      name: user.name,
+      phone: user.phone,
+      confirmPassword: "",
+      password: ""
+    });
+  }
 
   useEffect(() => {
     if (user.idUser && token) {
@@ -50,7 +63,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         logout();
-        toast.success(`Sesión cerrada con exito`, {
+        toast.success(`Sesión cerrada con éxito`, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -93,10 +106,19 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
   }
 
   const handleOnChange = (e) => {
+    const { name, value } = e.target;
     setInputDataEdit({
       ...inputDataEdit,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // const isChanged =
+    //   (name === "name" && value !== originalUserData.name) ||
+    //   (name === "phone" && value !== originalUserData.phone) ||
+    //   (name === "confirmPassword" && value) ||
+    //   (name === "password" && value);
+
+    setChanges(false);
   };
 
   const handleImageClick = () => {
@@ -111,35 +133,42 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
     setIsEditing(true);
   };
 
-  //HACER LE UPDATE USERRRRR
-  
   const handleConfirmClick = async () => {
     try {
-      await UserServices.updateUser(user.idUser, inputDataEdit, token);
-      setUser({
-        ...user,
-        name: inputDataEdit.name,
-        phone: inputDataEdit.phone
-      });
-      setIsEditing(false);
-      toast.success(`Datos actualizados con éxito`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+      await UserServices.updateUser(user.idUser, inputDataEdit, token).then((response) => {
+        if (response.status === 200) {
+          toast.success(`Datos actualizados correctamente`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+
+          setUser({
+            ...user,
+            name: inputDataEdit.name,
+            phone: inputDataEdit.phone
+          });
+          setIsEditing(false);
+          celarInputs();
+          setChanges(false);  // Reset changes after saving
+        }
+      }).catch((error) => {
+        console.log(error);
       });
     } catch (error) {
-      console.error("Error actualizando los datos:", error);
+      console.log(error)
     }
   };
 
   const handleCancelClick = () => {
     setInputDataEdit(originalUserData);
     setIsEditing(false);
+    setChanges(false);  // Reset changes when canceling
   };
 
   return (
@@ -164,7 +193,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
         <div className='infoProfile'>
           <div className='input_container'>
             <p>
-              <span>Nombre:</span>
+              <span>Nombre: </span>
               {isEditing ?
                 <input
                   onChange={handleOnChange}
@@ -172,17 +201,17 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
                   title="Introduce tu nombre"
                   name="name"
                   type="text"
-                  className="input_field"
+                  className="inputField"
                   value={inputDataEdit.name}
                 />
                 : user.name}
             </p>
             <p>
-              <span>Dirección de correo:</span>
+              <span>Dirección de correo: </span>
               {user.sub}
             </p>
             <p>
-              <span>Teléfono:</span>
+              <span>Teléfono: </span>
               {isEditing ?
                 <input
                   onChange={handleOnChange}
@@ -190,16 +219,45 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
                   title="Introduce tu teléfono"
                   name="phone"
                   type="text"
-                  className="input_field"
+                  className="inputField"
                   value={inputDataEdit.phone}
                 />
                 : user.phone}
             </p>
+            {
+              isEditing &&
+              <>
+                <p>
+                  <span>Contraseña actual: </span>
+                  <input
+                    onChange={handleOnChange}
+                    placeholder="Introduce tu contraseña ..."
+                    title="Introduce tu contraseña"
+                    name="confirmPassword"
+                    type="password"
+                    className="inputField"
+                    value={inputDataEdit.confirmPassword}
+                  />
+                </p>
+                <p>
+                  <span>Nueva contraseña: </span>
+                  <input
+                    onChange={handleOnChange}
+                    placeholder="Confirma tu contraseña ..."
+                    title="Confirma tu contraseña"
+                    name="password"
+                    type="password"
+                    className="inputField"
+                    value={inputDataEdit.password}
+                  />
+                </p>
+              </>
+            }
           </div>
           <div>
             {isEditing ? (
               <>
-                <button onClick={handleConfirmClick} className="sign-in_btn sign-in_btn-profile">
+                <button onClick={handleConfirmClick} disabled={!changes} className={`sign-in_btn sign-in_btn-profile ${!changes && "disabledbtn"}`}>
                   Confirmar
                 </button>
                 <button onClick={handleCancelClick} className="sign-in_apl sign-in_apl-profile">
