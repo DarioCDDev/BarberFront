@@ -58,12 +58,33 @@ const createAppointment = async (user, barber, date, token) => {
   }
 };
 
+const changeAppointmentStatus = async (token, id, statusData) => {
+  try {
+    const response = await axios.put(`${API_URL}/appointments/${id}`, {
+      status: {
+        idStatus: statusData.idStatus,
+        name: statusData.name
+      }
+    }, {
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return response
+  } catch (error) {
+    return error
+
+  }
+}
+
 
 const PedirCitaServices = {
   getAllBarbers,
   getBarberCalendar,
   getBarber,
-  createAppointment
+  createAppointment,
+  changeAppointmentStatus
 };
 
 export default PedirCitaServices;

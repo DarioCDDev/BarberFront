@@ -43,7 +43,7 @@ const BarberApp = () => {
     <div>
       <Navbar user={user}/>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<Home user={user}/>}></Route>
         <Route path="/pedirCita" element={<PedirCita token={token} />}></Route>
         <Route path="/pedirCita/:idBarber/calendar" element={<SelectAppointment token={token} user={user} />}></Route>
         <Route path="/citas" element={<MisCitas token={token} user={user} />}></Route>

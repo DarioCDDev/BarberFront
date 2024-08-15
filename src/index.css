@@ -96,6 +96,38 @@ nav {
   background-color: var(--fondo);
 }
 
+.main-content-secundary {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  margin-top: 80px;
+  gap: 20px;
+  height: 40px;
+  background-color: gray;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content-secundary span {
+  cursor: pointer;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.main-content-home h1 {
+  transition: opacity 0.5s ease-in-out;
+}
+.main-content-home{
+  padding-top: 120px;
+}
+
+.main-content-home h1:target {
+  opacity: 1;
+}
+
+
 
 
 @media only screen and (max-width: 1024px) {
