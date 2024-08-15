@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 
 const Login = ({setToken}) => {
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const initialInputsData = {
@@ -45,7 +47,9 @@ const Login = ({setToken}) => {
         }
         if (error) {
           return
-        }await UserServices.login(inputsData, setToken).then((response) => {
+        }
+        setIsLoading(true)
+        await UserServices.login(inputsData, setToken).then((response) => {
           toast.success(`Se ha iniciado sesión correctamente`, {
             position: "top-right",
             autoClose: 2000,
@@ -69,7 +73,7 @@ const Login = ({setToken}) => {
             theme: "light",
           });
         }).finally(() => {
-          console.log("final");
+          setIsLoading(false)
         });
       } catch (error) {
         toast.error(`El correo o la contraseña no son correctos`, {
@@ -90,7 +94,7 @@ const Login = ({setToken}) => {
   return (
     <>
 
-      <LoginRegisterForm option={"login"} handleOnChange={handleOnChange} handleOnSubmit={handleOnSubmit} emailError={emailError} passwordError={passwordError} />
+      <LoginRegisterForm option={"login"} isLoading={isLoading} handleOnChange={handleOnChange} handleOnSubmit={handleOnSubmit} emailError={emailError} passwordError={passwordError} />
     </>
   );
 }

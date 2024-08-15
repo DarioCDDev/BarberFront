@@ -3,16 +3,23 @@ import PedirCitaServices from '../../services/pedirCita.service';
 import './PedirCita.css';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Loader from '../utils/Loader';
 
-const PedirCita = ({token}) => {
+const PedirCita = ({ token }) => {
   const [barbers, setBarbers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchBarbers() {
       try {
-        const response = await PedirCitaServices.getAllBarbers(token);
-        setBarbers(response.data);
+        setIsLoading(true)
+        await PedirCitaServices.getAllBarbers(token).then((response) => {
+          setBarbers(response.data);
+        }).catch((error) => {
+        }).finally(() => {
+          setIsLoading(false)
+        });
       } catch (error) {
         if (error.response.status === 401) {
           navigate("/login")
@@ -33,18 +40,21 @@ const PedirCita = ({token}) => {
   }, []);
 
   return (
-    <div className="main-content">
-      <div className='container'>
-        {barbers?.map((barber, index) => (
-          <>
-            <div className="card" key={index} onClick={() =>  navigate(`/pedirCita/${barber.userId}/calendar`)}>
-              <img alt={`Foto del barber ${barber.name}`} src={`data:image/jpeg;base64,${barber.photo}`} />
-            </div>
-          </>
+    <>
+      <Loader isLoading={isLoading} />
+      <div className="main-content">
+        <div className='container'>
+          {barbers?.map((barber, index) => (
+            <>
+              <div className="card" key={index} onClick={() => navigate(`/pedirCita/${barber.userId}/calendar`)}>
+                <img alt={`Foto del barber ${barber.name}`} src={`data:image/jpeg;base64,${barber.photo}`} />
+              </div>
+            </>
 
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

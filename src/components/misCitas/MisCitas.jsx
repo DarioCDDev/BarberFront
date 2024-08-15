@@ -37,14 +37,14 @@ const MisCitas = ({ token, user }) => {
     getActiveAppointments()
   }, [])
 
-  const changeAppointmentStatus = async(id) => {
+  const changeAppointmentStatus = async (id) => {
     const status = {
-      "idStatus" : 2,
+      "idStatus": 2,
       "name": "Eliminado"
     }
     try {
       const response = await PedirCitaServices.changeAppointmentStatus(token, id, status);
-      
+
       if (response.status === 200) {
         await getActiveAppointments();
         toast.success(`Cita cancelada con éxito`, {
@@ -77,8 +77,8 @@ const MisCitas = ({ token, user }) => {
       {appointments.length >= 1 ? (
         appointments.map((appointment, index) => {
           return (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className={`card ${appointment.status.idStatus === 1 ? 'green' : 'red'}`}
             >
               <p className="tip">
@@ -90,8 +90,8 @@ const MisCitas = ({ token, user }) => {
                 <p className="second-text">Correo: {appointment.barber.email}</p>
               </div>
               {appointment.status.idStatus === 1 && (
-                <button 
-                  onClick={() => changeAppointmentStatus(appointment.idAppointment)} 
+                <button
+                  onClick={() => changeAppointmentStatus(appointment.idAppointment)}
                   className="sign-in_apl sign-in_apl-appointment"
                 >
                   Cancelar cita
@@ -104,8 +104,8 @@ const MisCitas = ({ token, user }) => {
         <div className="main-content" style={{ textAlign: 'center' }}>
           <h1>Aún no tienes citas</h1>
           <span>
-            Para solicitar una cita haga click en el siguiente enlace: 
-            <Link to="/pedirCita" style={{ textDecoration: 'none', color: '#007BFF' }}>
+            Para solicitar una cita haga click en el siguiente enlace:
+            <Link to="/pedirCita" style={{ textDecoration: 'none', color: '#007BFF', paddingLeft: "5px" }}>
               Pedir cita
             </Link>
           </span>

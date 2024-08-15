@@ -6,6 +6,7 @@ import "./Perfil.css";
 import { Button } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import Loader from '../utils/Loader';
 
 export const Perfil = ({ user, setUser, token, setToken }) => {
 
@@ -13,6 +14,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [userPhoto, setUserPhoto] = useState(defaultUserPhoto);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [originalUserData, setOriginalUserData] = useState({
     name: user.name,
     phone: user.phone
@@ -81,8 +83,14 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
+      setIsLoading(true)
       try {
-        await UserServices.uploadPhoto(file, user.idUser, token);
+        await UserServices.uploadPhoto(file, user.idUser, token).then((response) => {
+        }).catch((error) => {
+          console.log(error);
+        }).finally(() => {
+          setIsLoading(false)
+        });
         getPhoto();
       } catch (error) {
         console.error("Error subiendo la foto:", error);
@@ -91,11 +99,17 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
   }
 
   const getPhoto = async () => {
+    setIsLoading(true)
     try {
-      const response = await UserServices.getPhoto(user.idUser, token);
-      const blob = new Blob([response.data], { type: "image/jpeg" });
-      const url = URL.createObjectURL(blob);
-      setUserPhoto(url);
+      await UserServices.getPhoto(user.idUser, token).then((response) => {
+        const blob = new Blob([response.data], { type: "image/jpeg" });
+        const url = URL.createObjectURL(blob);
+        setUserPhoto(url);
+      }).catch((error) => {
+
+      }).finally(() => {
+        setIsLoading(false)
+      });
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setUserPhoto(defaultUserPhoto);
@@ -111,12 +125,6 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
       ...inputDataEdit,
       [name]: value,
     });
-
-    // const isChanged =
-    //   (name === "name" && value !== originalUserData.name) ||
-    //   (name === "phone" && value !== originalUserData.phone) ||
-    //   (name === "confirmPassword" && value) ||
-    //   (name === "password" && value);
 
     setChanges(false);
   };
@@ -172,112 +180,115 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
   };
 
   return (
-    <div className="main-content">
-      <div className='profileContainer'>
-        <div>
+    <>
+      <Loader isLoading={isLoading} />
+      <div className="main-content">
+        <div className='profileContainer'>
           <div>
-            <img
-              onClick={handleImageClick}
-              className="photoProfile"
-              alt={`Foto de perfil de ${user.name}`}
-              src={userPhoto}
-            />
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
+            <div>
+              <img
+                onClick={handleImageClick}
+                className="photoProfile"
+                alt={`Foto de perfil de ${user.name}`}
+                src={userPhoto}
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+            </div>
           </div>
-        </div>
-        <div className='infoProfile'>
-          <div className='input_container'>
-            <p>
-              <span>Nombre: </span>
-              {isEditing ?
-                <input
-                  onChange={handleOnChange}
-                  placeholder="Introduce tu nombre ..."
-                  title="Introduce tu nombre"
-                  name="name"
-                  type="text"
-                  className="inputField"
-                  value={inputDataEdit.name}
-                />
-                : user.name}
-            </p>
-            <p>
-              <span>Dirección de correo: </span>
-              {user.sub}
-            </p>
-            <p>
-              <span>Teléfono: </span>
-              {isEditing ?
-                <input
-                  onChange={handleOnChange}
-                  placeholder="Introduce tu teléfono ..."
-                  title="Introduce tu teléfono"
-                  name="phone"
-                  type="text"
-                  className="inputField"
-                  value={inputDataEdit.phone}
-                />
-                : user.phone}
-            </p>
-            {
-              isEditing &&
-              <>
-                <p>
-                  <span>Contraseña actual: </span>
+          <div className='infoProfile'>
+            <div className='input_container'>
+              <p>
+                <span>Nombre: </span>
+                {isEditing ?
                   <input
                     onChange={handleOnChange}
-                    placeholder="Introduce tu contraseña ..."
-                    title="Introduce tu contraseña"
-                    name="confirmPassword"
-                    type="password"
+                    placeholder="Introduce tu nombre ..."
+                    title="Introduce tu nombre"
+                    name="name"
+                    type="text"
                     className="inputField"
-                    value={inputDataEdit.confirmPassword}
+                    value={inputDataEdit.name}
                   />
-                </p>
-                <p>
-                  <span>Nueva contraseña: </span>
+                  : user.name}
+              </p>
+              <p>
+                <span>Dirección de correo: </span>
+                {user.sub}
+              </p>
+              <p>
+                <span>Teléfono: </span>
+                {isEditing ?
                   <input
                     onChange={handleOnChange}
-                    placeholder="Confirma tu contraseña ..."
-                    title="Confirma tu contraseña"
-                    name="password"
-                    type="password"
+                    placeholder="Introduce tu teléfono ..."
+                    title="Introduce tu teléfono"
+                    name="phone"
+                    type="text"
                     className="inputField"
-                    value={inputDataEdit.password}
+                    value={inputDataEdit.phone}
                   />
-                </p>
-              </>
-            }
-          </div>
-          <div>
-            {isEditing ? (
-              <>
-                <button onClick={handleConfirmClick} disabled={!changes} className={`sign-in_btn sign-in_btn-profile ${!changes && "disabledbtn"}`}>
-                  Confirmar
-                </button>
-                <button onClick={handleCancelClick} className="sign-in_apl sign-in_apl-profile">
-                  Cancelar
-                </button>
-              </>
-            ) : (
-              <>
-                <button onClick={handleEditClick} className="sign-in_btn sign-in_btn-profile">
-                  Modificar datos
-                </button>
-                <button onClick={() => warningLogout()} className="sign-in_apl sign-in_apl-profile">
-                  Cerrar sesión
-                </button>
-              </>
-            )}
+                  : user.phone}
+              </p>
+              {
+                isEditing &&
+                <>
+                  <p>
+                    <span>Contraseña actual: </span>
+                    <input
+                      onChange={handleOnChange}
+                      placeholder="Introduce tu contraseña ..."
+                      title="Introduce tu contraseña"
+                      name="confirmPassword"
+                      type="password"
+                      className="inputField"
+                      value={inputDataEdit.confirmPassword}
+                    />
+                  </p>
+                  <p>
+                    <span>Nueva contraseña: </span>
+                    <input
+                      onChange={handleOnChange}
+                      placeholder="Confirma tu contraseña ..."
+                      title="Confirma tu contraseña"
+                      name="password"
+                      type="password"
+                      className="inputField"
+                      value={inputDataEdit.password}
+                    />
+                  </p>
+                </>
+              }
+            </div>
+            <div>
+              {isEditing ? (
+                <>
+                  <button onClick={handleConfirmClick} disabled={!changes} className={`sign-in_btn sign-in_btn-profile ${!changes && "disabledbtn"}`}>
+                    Confirmar
+                  </button>
+                  <button onClick={handleCancelClick} className="sign-in_apl sign-in_apl-profile">
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={handleEditClick} className="sign-in_btn sign-in_btn-profile">
+                    Modificar datos
+                  </button>
+                  <button onClick={() => warningLogout()} className="sign-in_apl sign-in_apl-profile">
+                    Cerrar sesión
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
+        <MisCitas user={user} token={token} />
       </div>
-      <MisCitas user={user} token={token} />
-    </div>
+    </>
   );
 }

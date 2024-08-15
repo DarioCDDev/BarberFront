@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-
 function SecudaryNavbar() {
 
   const sections = {

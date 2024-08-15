@@ -20,6 +20,7 @@ const Register = ({setToken}) => {
   const [phoneError, setPhoneError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
   const [confirmPasswordError, setConfirmPasswordError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -88,7 +89,7 @@ const Register = ({setToken}) => {
         if (error) {
           return
         }
-        console.log(inputsData);
+        setIsLoading(true)
         await UserServices.register(inputsData, setToken).then((response) => {
           toast.success(`Cuenta creada correctamente`, {
             position: "top-right",
@@ -104,7 +105,7 @@ const Register = ({setToken}) => {
         }).catch((error) => {
           console.log(error);
         }).finally(() => {
-          console.log("final");
+          setIsLoading(false)
         });
       } catch (error) {
         toast.error(`Ha ocurrido un error, intento de nueevo`, {
@@ -122,8 +123,10 @@ const Register = ({setToken}) => {
     checkUsuario();
   };
 
+  
+
   return (
-    <LoginRegisterForm option={"register"} handleOnChange={handleOnChange} handleOnSubmit={handleOnSubmit} nameError={nameError} emailError={emailError} phoneError={phoneError} passwordError={passwordError} confirmPasswordError={confirmPasswordError} />
+    <LoginRegisterForm option={"register"} isLoading={isLoading} handleOnChange={handleOnChange} handleOnSubmit={handleOnSubmit} nameError={nameError} emailError={emailError} phoneError={phoneError} passwordError={passwordError} confirmPasswordError={confirmPasswordError} />
   );
 }
 

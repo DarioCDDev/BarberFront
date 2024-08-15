@@ -5,11 +5,10 @@ import './SelectAppointment.css';  // Importa el archivo CSS
 import PedirCitaServices from '../../services/pedirCita.service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import ClipLoader from "react-spinners/ClipLoader";
-import UserServices from '../../services/user.service';
 import { toast } from 'react-toastify';
 import formatDateInSpanish from "../utils/formatDateInSpanish"
 import convertToISO8601 from "../utils/convertToISO8601"
+import Loader from '../utils/Loader';
 
 const SelectAppointment = ({ token, user }) => {
   const { idBarber } = useParams();
@@ -20,7 +19,7 @@ const SelectAppointment = ({ token, user }) => {
   const [hours, setHours] = useState([]); // Estado para las horas disponibles
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedHour, setSelectedHour] = useState();
-  const [isloading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -192,18 +191,8 @@ const SelectAppointment = ({ token, user }) => {
 
   return (
     <>
-      {isloading &&
-        <div className="loader-container">
-          <div className="loader-spinner">
-            <ClipLoader
-              loading={isloading}
-              size={150}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-        </div>
-      }
+      <Loader
+        isLoading={isLoading} />
       <div className="main-content">
         Seleciona la fecha de tu cita
         <div className="calendar-container">
@@ -231,9 +220,9 @@ const SelectAppointment = ({ token, user }) => {
                     <span>{`${selectedHour || "Sin seleccionar"}`}</span>
                   </div>
                 </div>
-              <Button className='btnConfirm' onClick={(e) => handleOnSubmitAppointment(e)}>
-                Confrimar cita
-              </Button>
+                <Button className='btnConfirm' onClick={(e) => handleOnSubmitAppointment(e)}>
+                  Confrimar cita
+                </Button>
               </div>
               {hours.length > 0 ? (
                 <div className='cardContainer'>
