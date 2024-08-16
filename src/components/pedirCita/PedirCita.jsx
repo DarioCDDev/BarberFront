@@ -16,24 +16,26 @@ const PedirCita = ({ token }) => {
         setIsLoading(true)
         await PedirCitaServices.getAllBarbers(token).then((response) => {
           setBarbers(response.data);
+          console.log(response);
+
         }).catch((error) => {
+          if (error.response.status === 401) {
+            navigate("/login")
+            toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
         }).finally(() => {
           setIsLoading(false)
         });
       } catch (error) {
-        if (error.response.status === 401) {
-          navigate("/login")
-          toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
       }
     }
     fetchBarbers();
@@ -43,10 +45,11 @@ const PedirCita = ({ token }) => {
     <>
       <Loader isLoading={isLoading} />
       <div className="main-content">
+          <h2>Selecciona a un barbero</h2>
         <div className='container'>
           {barbers?.map((barber, index) => (
             <>
-              <div className="card" key={index} onClick={() => navigate(`/pedirCita/${barber.userId}/calendar`)}>
+              <div className="card cardBarber" key={index} onClick={() => navigate(`/pedirCita/${barber.userId}/calendar`)}>
                 <img alt={`Foto del barber ${barber.name}`} src={`data:image/jpeg;base64,${barber.photo}`} />
               </div>
             </>

@@ -15,53 +15,61 @@ const SelectAppointment = ({ token, user }) => {
   const [availability, setAvailability] = useState({});
   const [dates, setDates] = useState([]);
   const [barber, setBarber] = useState();
-  const [selectedDate, setSelectedDate] = useState(null); // Estado para la fecha seleccionada
-  const [hours, setHours] = useState([]); // Estado para las horas disponibles
+  const [selectedDate, setSelectedDate] = useState(null); 
+  const [hours, setHours] = useState([]); 
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedHour, setSelectedHour] = useState();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [services, setServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
 
   const navigate = useNavigate();
 
   const clearData = () => {
-    setSelectedHour();
-    setSelectedCard();
-  }
+    setSelectedHour(null);
+    setSelectedCard(null);
+    setSelectedServices([]);  // Limpiar servicios seleccionados
+  };
+
+  const getAllServices = async () => {
+    await PedirCitaServices.getAllServices().then((response) => {
+      setServices(response.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
 
   const getBarberCalendar = async (id) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       await PedirCitaServices.getBarberCalendar(id, token).then((response) => {
         setDates(response.data.dateTimestamps.map(date => new Date(date)));
         setAvailability(response.data.availability);
-      }).then((error) => {
-
       }).finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
     } catch (error) {
-
       if (error.response.status === 401) {
-        navigate("/pedirCita")
+        navigate("/pedirCita");
       }
     }
-  }
+  };
 
   const getBarber = async (id) => {
     try {
       const response = await PedirCitaServices.getBarber(id, token);
-      console.log(response.data);
       setBarber(response.data);
     } catch (error) {
       if (error.response.status === 401) {
-        navigate("/pedirCita")
+        navigate("/pedirCita");
       }
     }
-  }
+  };
 
   useEffect(() => {
     getBarber(idBarber);
     getBarberCalendar(idBarber);
+    getAllServices();
   }, [idBarber]);
 
   const tileDisabled = ({ date, view }) => {
@@ -69,11 +77,9 @@ const SelectAppointment = ({ token, user }) => {
   };
 
   const handleDateChange = (date) => {
-    console.log("cambios");
     setSelectedDate(date);
-    console.log(date);
-    displayHoursToGetAppointment(date); // Muestra las horas al seleccionar la fecha
-    clearData()
+    displayHoursToGetAppointment(date);
+    clearData();
   };
 
   const displayHoursToGetAppointment = (date) => {
@@ -95,15 +101,24 @@ const SelectAppointment = ({ token, user }) => {
   };
 
   const handleCardClick = (index, time) => {
-    console.log(time);
     setSelectedCard(index);
-    setSelectedHour(time)
+    setSelectedHour(time);
+  };
+
+  const handleServiceClick = (service) => {
+    setSelectedServices(prevServices => {
+      if (prevServices.includes(service)) {
+        return prevServices.filter(s => s !== service); // Deseleccionar servicio
+      } else {
+        return [...prevServices, service]; // Seleccionar servicio
+      }
+    });
   };
 
   const handleOnSubmitAppointment = async (e) => {
     e.preventDefault();
-    if ((selectedDate === "" || selectedDate === null || selectedDate === undefined) || (selectedHour === "" || selectedHour === null || selectedHour === undefined)) {
-      toast.error(`Para poder crear la cita tiene que seleccionar fecha y hora`, {
+    if (!selectedDate || !selectedHour || selectedServices.length === 0) {
+      toast.error(`Debe seleccionar fecha, hora y al menos un servicio para crear la cita`, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -115,13 +130,14 @@ const SelectAppointment = ({ token, user }) => {
       });
       return;
     }
+
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const isoFormattedDate = convertToISO8601(selectedDate, selectedHour);
 
-      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, token).then((response) => {
-        navigate("/")
-        toast.success(`Cita creada con éxito, no vemos pronto 🙂`, {
+      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, selectedServices, token).then((response) => {
+        navigate("/");
+        toast.success(`Cita creada con éxito, nos vemos pronto 🙂`, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -133,7 +149,7 @@ const SelectAppointment = ({ token, user }) => {
         });
       }).catch((error) => {
         if (error.response.status === 401) {
-          navigate("/login")
+          navigate("/login");
           toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
             position: "top-right",
             autoClose: 2000,
@@ -158,11 +174,11 @@ const SelectAppointment = ({ token, user }) => {
           });
         }
       }).finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
     } catch (error) {
       if (error.response.status === 401) {
-        navigate("/login")
+        navigate("/login");
         toast.warning(`Para poder pedir una cita primero tiene que iniciar sesión`, {
           position: "top-right",
           autoClose: 2000,
@@ -187,8 +203,8 @@ const SelectAppointment = ({ token, user }) => {
         });
       }
     }
-  }
-
+  };
+  
   return (
     <>
       <Loader
@@ -219,23 +235,41 @@ const SelectAppointment = ({ token, user }) => {
                     <span>{`Hora: `}</span>
                     <span>{`${selectedHour || "Sin seleccionar"}`}</span>
                   </div>
+                  <div>
+                    <span>{`Servicio: `}</span>
+                    <span>{`${selectedHour || "Sin seleccionar"}`}</span>
+                  </div>
                 </div>
                 <Button className='btnConfirm' onClick={(e) => handleOnSubmitAppointment(e)}>
                   Confrimar cita
                 </Button>
               </div>
+              <h5>Selecciona una hora</h5>
               {hours.length > 0 ? (
                 <div className='cardContainer'>
                   {hours.map((slot, index) => (
                     <div key={index} className={`card ${(selectedCard === index && slot.status === "available") ? 'selectedCard' : (slot.status === "available" ? "availableCard" : "notAvailableCard")}`}
                       onClick={() => handleCardClick(index, slot.status === "available" && slot.time)}>
                       <span>{slot.time}</span>
+
                     </div>
                   ))}
+
                 </div>
               ) : (
                 <p>No hay horas disponibles para esta fecha.</p>
               )}
+              <h5>Selecciona un servicio</h5>
+              <div className='cardContainer'>
+                {services.map((service, index) => (
+                  <div key={index} className={`card`}
+                  onClick={(e) => console.log(e.target)
+                  }
+                  >
+                    <span>{service.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         )}

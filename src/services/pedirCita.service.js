@@ -14,6 +14,22 @@ const getAllBarbers = async (token) => {
   return response
 }
 
+const getAllBarbersPublic = async () => {
+  const response = await axios.get(`${API_URL}/public/user/rol`, {
+    params: {
+      rolId: 1
+    },
+    
+  });
+  return response
+}
+
+const getAllServices = async () => {
+  const response = await axios.get(`${API_URL}/public/service`);
+  return response
+}
+
+
 const getBarberCalendar = async (id, token) => {
   const response = await axios.get(`${API_URL}/appointments/fullCalendar`, {
     params: {
@@ -84,7 +100,9 @@ const PedirCitaServices = {
   getBarberCalendar,
   getBarber,
   createAppointment,
-  changeAppointmentStatus
+  changeAppointmentStatus,
+  getAllBarbersPublic,
+  getAllServices
 };
 
 export default PedirCitaServices;
