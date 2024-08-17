@@ -8,7 +8,6 @@ const Servicios = () => {
   const getAllBarbersPublic = async () => {
     await PedirCitaServices.getAllBarbersPublic().then((response) => {
       setBarber(response.data)
-      console.log(response);
     }).catch((error) => {
 
     })
@@ -16,7 +15,6 @@ const Servicios = () => {
   const getAllServices = async () => {
 
     await PedirCitaServices.getAllServices().then((response) => {
-      console.log(response.data);
       setServices(response.data)
 
     }).catch((error) => {

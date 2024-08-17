@@ -151,12 +151,13 @@ const BarberHome = ({ user, token }) => {
         endAccessor="end"
         style={{ height: "100%", width: "100%" }}
         onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot} // Maneja la selección de un día
-        selectable={true} // Habilita la selección de días
-        view={calendarView} // Controla la vista actual del calendario
-        onView={handleViewChange} // Controla el cambio de vista
-        date={selectedDate} // Establece la fecha seleccionada
+        // onSelectSlot={handleSelectSlot} // Maneja la selección de un día
+        // selectable={true} // Habilita la selección de días
+        // view={calendarView} // Controla la vista actual del calendario
+        // onView={handleViewChange} // Controla el cambio de vista
+        // date={selectedDate} // Establece la fecha seleccionada
         eventPropGetter={eventStyleGetter} // Aplica estilos a través de eventPropGetter
+        
       />
 
       <Modal show={showModal} onHide={handleCloseModal}>

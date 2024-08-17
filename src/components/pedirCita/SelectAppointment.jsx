@@ -18,6 +18,7 @@ const SelectAppointment = ({ token, user }) => {
   const [selectedDate, setSelectedDate] = useState(null); 
   const [hours, setHours] = useState([]); 
   const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedService, setSelectedService] = useState(null)
   const [selectedHour, setSelectedHour] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [services, setServices] = useState([]);
@@ -104,16 +105,11 @@ const SelectAppointment = ({ token, user }) => {
     setSelectedCard(index);
     setSelectedHour(time);
   };
-
-  const handleServiceClick = (service) => {
-    setSelectedServices(prevServices => {
-      if (prevServices.includes(service)) {
-        return prevServices.filter(s => s !== service); // Deseleccionar servicio
-      } else {
-        return [...prevServices, service]; // Seleccionar servicio
-      }
-    });
+  const handleServiceClick = (index, service) => {
+    setSelectedService(index);
+    setSelectedServices(service);
   };
+
 
   const handleOnSubmitAppointment = async (e) => {
     e.preventDefault();
@@ -262,8 +258,8 @@ const SelectAppointment = ({ token, user }) => {
               <h5>Selecciona un servicio</h5>
               <div className='cardContainer'>
                 {services.map((service, index) => (
-                  <div key={index} className={`card`}
-                  onClick={() => setSelectedServices(service)
+                  <div key={index} className={`card ${(selectedService === index) && "selectedCard" }`}
+                  onClick={() => handleServiceClick(index, service)
                   }
                   >
                     <span>{service.name}</span>
