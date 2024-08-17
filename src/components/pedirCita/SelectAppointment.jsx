@@ -135,7 +135,7 @@ const SelectAppointment = ({ token, user }) => {
       setIsLoading(true);
       const isoFormattedDate = convertToISO8601(selectedDate, selectedHour);
 
-      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, selectedServices, token).then((response) => {
+      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, selectedServices, "si", token).then((response) => {
         navigate("/");
         toast.success(`Cita creada con éxito, nos vemos pronto 🙂`, {
           position: "top-right",
@@ -237,7 +237,7 @@ const SelectAppointment = ({ token, user }) => {
                   </div>
                   <div>
                     <span>{`Servicio: `}</span>
-                    <span>{`${selectedHour || "Sin seleccionar"}`}</span>
+                    <span>{`${selectedServices !== undefined ? `${selectedServices.name} - ${selectedServices.price}€` : "Sin seleccionar"}`}</span>
                   </div>
                 </div>
                 <Button className='btnConfirm' onClick={(e) => handleOnSubmitAppointment(e)}>
@@ -263,7 +263,7 @@ const SelectAppointment = ({ token, user }) => {
               <div className='cardContainer'>
                 {services.map((service, index) => (
                   <div key={index} className={`card`}
-                  onClick={(e) => console.log(e.target)
+                  onClick={() => setSelectedServices(service)
                   }
                   >
                     <span>{service.name}</span>

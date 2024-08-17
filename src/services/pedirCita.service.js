@@ -51,14 +51,20 @@ const getBarber = async (id, token) => {
   return response
 }
 
-const createAppointment = async (user, barber, date, token) => {
+const createAppointment = async (user, barber, date,selectedServices, comment, token) => {
+  console.log(selectedServices);
+  console.log(comment);
+  
+  
   try {
     const response = await axios.post(`${API_URL}/appointments`, {
       appointment: {
         barberId: barber.idUser,
-        clientId: user.idUser, // Corrigiendo el error tipográfico
-        appointmentTime: date,           // Asegurando que la fecha esté en el lugar correcto
+        clientId: user.idUser,
+        appointmentTime: date,
       },
+      serviceId: selectedServices.idService,
+      comment : comment,
       statusId: 1           // Ajustando el statusId si es necesario
     }, {
       headers: {
