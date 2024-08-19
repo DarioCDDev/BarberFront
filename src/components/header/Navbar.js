@@ -3,10 +3,6 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Navbar({ user }) {
-  useEffect(() => {
-    console.log("user", user);
-  }, [])
-
   const navRef = useRef();
 
   const showNavbar = () => {

@@ -7,6 +7,7 @@ import BarberService from '../../services/barber.service';
 import formatDateInSpanish from '../utils/formatDateInSpanish';
 import PedirCitaServices from '../../services/pedirCita.service';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const BarberHome = ({ user, token }) => {
   const [appointments, setAppointments] = useState([]);
@@ -36,25 +37,25 @@ const BarberHome = ({ user, token }) => {
       if (response.status === 200) {
         statusId === 4
           ? toast.success(`Cita confirmada con éxito`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            })
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
           : toast.success(`Cita cancelada con éxito`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
 
         // Actualizar las citas después de cambiar el estado
         getAllAppointments();
@@ -84,7 +85,7 @@ const BarberHome = ({ user, token }) => {
       client: appointment.client.name,
       service: appointment.service.name,
       comments: appointment.comments,
-      status: appointment.status.name,
+      status: appointment.status,
       statusId: appointment.status.idStatus, // Guarda el idStatus para facilitar el uso en eventPropGetter
     };
   });
@@ -142,6 +143,60 @@ const BarberHome = ({ user, token }) => {
     }
   };
 
+  const completeButton = () => {
+    Swal.fire({
+      title: "¿Seguro que quieres marcar como completada la cita?",
+      text: "Una vez marcada como completada no podrá aplcar mas acciones sobre la cita",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, marcar como completada"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        changeAppointmentStatus(selectedEvent.id, 4)
+        toast.success(`Cita marcada como completada con éxito`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
+  }
+
+  const cancelButton = () => {
+    Swal.fire({
+      title: "¿Seguro que quieres eliminar la cita?",
+      text: "Una vez eliminada no podrá aplcar mas acciones sobre la cita",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, eliminar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        changeAppointmentStatus(selectedEvent.id, 2)
+        toast.success(`Cita eliminada con éxito`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
+  }
+
   return (
     <div className="main-content-home" style={{ height: "100vh", width: "100vw" }}>
       <Calendar
@@ -157,7 +212,7 @@ const BarberHome = ({ user, token }) => {
         // onView={handleViewChange} // Controla el cambio de vista
         // date={selectedDate} // Establece la fecha seleccionada
         eventPropGetter={eventStyleGetter} // Aplica estilos a través de eventPropGetter
-        
+
       />
 
       <Modal show={showModal} onHide={handleCloseModal}>
@@ -171,18 +226,24 @@ const BarberHome = ({ user, token }) => {
               <p><strong>Barbero:</strong> {selectedEvent.barber}</p>
               <p><strong>Servicio:</strong> {selectedEvent.service}</p>
               <p><strong>Fecha y Hora:</strong> {formatDateInSpanish(selectedEvent.start)}</p>
-              <p><strong>Estado:</strong> {selectedEvent.status}</p>
+              <p><strong>Estado:</strong> {selectedEvent.status.name}</p>
               <p><strong>Comentarios:</strong> {selectedEvent.comments}</p>
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => changeAppointmentStatus(selectedEvent.id, 2)}>
-            Cancelar cita
-          </Button>
-          <Button variant="success" onClick={() => changeAppointmentStatus(selectedEvent.id, 4)}>
-            Confirmar cita
-          </Button>
+          {(selectedEvent?.status?.idStatus !== 2 && selectedEvent?.status?.idStatus !== 3)
+            &&
+            <>
+              <Button variant="danger" onClick={() => cancelButton()}>
+                Cancelar cita
+              </Button>
+              <Button variant="success" onClick={() => completeButton()}>
+                Cita completada
+              </Button>
+            </>
+
+          }
           <Button variant="primary" onClick={handleCloseModal}>
             Cerrar
           </Button>

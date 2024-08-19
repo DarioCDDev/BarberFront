@@ -15,28 +15,28 @@ const SelectAppointment = ({ token, user }) => {
   const [availability, setAvailability] = useState({});
   const [dates, setDates] = useState([]);
   const [barber, setBarber] = useState();
-  const [selectedDate, setSelectedDate] = useState(null); 
-  const [hours, setHours] = useState([]); 
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [hours, setHours] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedService, setSelectedService] = useState(null)
   const [selectedHour, setSelectedHour] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [services, setServices] = useState([]);
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState();
+  const [message, setMessage] = useState()
 
   const navigate = useNavigate();
 
   const clearData = () => {
     setSelectedHour(null);
     setSelectedCard(null);
-    setSelectedServices([]);  // Limpiar servicios seleccionados
+    setSelectedServices("");  // Limpiar servicios seleccionados
   };
 
   const getAllServices = async () => {
     await PedirCitaServices.getAllServices().then((response) => {
       setServices(response.data);
     }).catch((error) => {
-      console.log(error);
     });
   };
 
@@ -131,7 +131,7 @@ const SelectAppointment = ({ token, user }) => {
       setIsLoading(true);
       const isoFormattedDate = convertToISO8601(selectedDate, selectedHour);
 
-      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, selectedServices, "si", token).then((response) => {
+      await PedirCitaServices.createAppointment(user, barber, isoFormattedDate, selectedServices, message, token).then((response) => {
         navigate("/");
         toast.success(`Cita creada con éxito, nos vemos pronto 🙂`, {
           position: "top-right",
@@ -200,7 +200,9 @@ const SelectAppointment = ({ token, user }) => {
       }
     }
   };
-  
+
+
+
   return (
     <>
       <Loader
@@ -211,7 +213,6 @@ const SelectAppointment = ({ token, user }) => {
           <Calendar
             tileDisabled={tileDisabled}
             onChange={handleDateChange}
-            onClickDay={(e) => console.log(e)}
           />
         </div>
         {selectedDate && (
@@ -233,7 +234,12 @@ const SelectAppointment = ({ token, user }) => {
                   </div>
                   <div>
                     <span>{`Servicio: `}</span>
-                    <span>{`${selectedServices !== undefined ? `${selectedServices.name} - ${selectedServices.price}€` : "Sin seleccionar"}`}</span>
+                    <span>{`${selectedServices !== "" ? `${selectedServices.name} - ${selectedServices.price}€` : "Sin seleccionar"}`}</span>
+                  </div>
+                  <div>
+                    <span>{`Observaciones: `}</span>
+                    <textarea onChange={(e) => setMessage(e.target.value)
+                    }></textarea>
                   </div>
                 </div>
                 <Button className='btnConfirm' onClick={(e) => handleOnSubmitAppointment(e)}>
@@ -258,9 +264,9 @@ const SelectAppointment = ({ token, user }) => {
               <h5>Selecciona un servicio</h5>
               <div className='cardContainer'>
                 {services.map((service, index) => (
-                  <div key={index} className={`card ${(selectedService === index) && "selectedCard" }`}
-                  onClick={() => handleServiceClick(index, service)
-                  }
+                  <div key={index} className={`card ${(selectedService === index) && "selectedCard"}`}
+                    onClick={() => handleServiceClick(index, service)
+                    }
                   >
                     <span>{service.name}</span>
                   </div>

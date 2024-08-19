@@ -16,7 +16,6 @@ const PedirCita = ({ token }) => {
         setIsLoading(true)
         await PedirCitaServices.getAllBarbers(token).then((response) => {
           setBarbers(response.data);
-          console.log(response);
 
         }).catch((error) => {
           if (error.response.status === 401) {

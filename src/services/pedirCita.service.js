@@ -52,10 +52,6 @@ const getBarber = async (id, token) => {
 }
 
 const createAppointment = async (user, barber, date,selectedServices, comment, token) => {
-  console.log(selectedServices);
-  console.log(comment);
-  
-  
   try {
     const response = await axios.post(`${API_URL}/appointments`, {
       appointment: {

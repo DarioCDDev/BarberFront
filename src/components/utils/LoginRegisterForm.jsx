@@ -174,7 +174,7 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
                   <hr className="line" />
                 </div>
                 <span className="note">¿Ya tienes cuenta? Haz click en el botón para Iniciar sesión</span>
-                <button title="Sign In" type="submit" className="sign-in_apl">
+                <button title="Sign In" className="sign-in_apl">
                   <Link to={"/login"} className="registerLink">Inicia sesión aquí</Link>
                 </button>
               </>

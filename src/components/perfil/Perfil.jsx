@@ -87,7 +87,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
       try {
         await UserServices.uploadPhoto(file, user.idUser, token).then((response) => {
         }).catch((error) => {
-          console.log(error);
+
         }).finally(() => {
           setIsLoading(false)
         });
@@ -166,10 +166,10 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
           setChanges(false);  // Reset changes after saving
         }
       }).catch((error) => {
-        console.log(error);
+
       });
     } catch (error) {
-      console.log(error)
+
     }
   };
 

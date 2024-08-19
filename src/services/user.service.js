@@ -28,7 +28,7 @@ const login = async (data, setToken) => {
 };
 
 const register = async (data, setToken) => {
-  console.log(data);
+
   try {
     const response = await axios.post(`${API_URL}/register`, {
       rol_id: 2,
@@ -61,10 +61,10 @@ const getUserDataWithToken = async (token) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response);
+
     return response
   } catch (error) {
-    console.log(error);
+
   }
 }
 
@@ -80,7 +80,7 @@ const getActiveAppointments = async (user, token) => {
     });
     return response
   } catch (error) {
-    console.log(error);
+
   }
 }
 
@@ -100,7 +100,7 @@ const uploadPhoto = async (photo, userId, token) => {
 
     return response;
   } catch (error) {
-    console.log(error);
+
   }
 };
 
@@ -133,7 +133,7 @@ const updateUser = async (userId, data, token) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response);
+
 
     return response;
   }
@@ -141,6 +141,66 @@ const updateUser = async (userId, data, token) => {
     return error;
   }
 }
+
+const verifyAccount = async (email, code, token) => {
+  try {
+    const response = await axios.post(`${API_URL}/verify`,
+      {
+        email: email,
+        code: code
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+const resendCode = async (email, token) => {
+  console.log(token);
+  
+  try {
+    const response = await axios.get(`${API_URL}/public/resendcode`,
+      {
+        params:{
+          email: email
+        }
+      },
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+const deleteUser = async (id, token) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/${id}`,
+
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 
 
@@ -152,7 +212,10 @@ const UserServices = {
   getActiveAppointments,
   uploadPhoto,
   getPhoto,
-  updateUser
+  updateUser,
+  verifyAccount,
+  resendCode,
+  deleteUser
 };
 
 export default UserServices;

@@ -53,7 +53,7 @@ const Register = ({setToken}) => {
         let error = false
 
         if (inputsData.password !== inputsData.confirmPassword) {
-          console.log("no es igual");
+        
           toast.error('Las contraseñas no coinciden', {
             position: "top-right",
             autoClose: 2000,
@@ -103,7 +103,7 @@ const Register = ({setToken}) => {
           });
           navigate("/")
         }).catch((error) => {
-          console.log(error);
+     
         }).finally(() => {
           setIsLoading(false)
         });

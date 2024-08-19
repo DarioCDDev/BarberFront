@@ -18,7 +18,6 @@ const Servicios = () => {
       setServices(response.data)
 
     }).catch((error) => {
-      console.log(error);
 
     })
 
