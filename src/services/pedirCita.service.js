@@ -51,12 +51,12 @@ const getBarber = async (id, token) => {
   return response
 }
 
-const createAppointment = async (user, barber, date,selectedServices, comment, token) => {
+const createAppointment = async (user, barber, date,selectedServices, comment, token, isBarber) => {
   try {
     const response = await axios.post(`${API_URL}/appointments`, {
       appointment: {
         barberId: barber.idUser,
-        clientId: user.idUser,
+        clientId: isBarber ? user : user.idUser,
         appointmentTime: date,
       },
       serviceId: selectedServices.idService,

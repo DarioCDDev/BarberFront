@@ -43,7 +43,7 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
                   </>
                   :
                   <>
-                    <label className="input_label" for="name">Nombre </label>
+                    <label className="input_label" for="name">Nombre y apellido/s</label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                       <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
@@ -164,7 +164,7 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
             option === "register"
               ?
               <>
-                <button title="Sign In" type="submit" className="sign-in_btn">
+                <button title="Registrate" type="submit" className="sign-in_btn">
                   <span>Registrate</span>
                 </button>
 
@@ -174,13 +174,13 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
                   <hr className="line" />
                 </div>
                 <span className="note">¿Ya tienes cuenta? Haz click en el botón para Iniciar sesión</span>
-                <button title="Sign In" className="sign-in_apl">
+                <button title="Inicia sesión aquí" className="sign-in_apl">
                   <Link to={"/login"} className="registerLink">Inicia sesión aquí</Link>
                 </button>
               </>
               :
               <>
-                <button title="Sign In" type="submit" className="sign-in_btn">
+                <button title="Iniciar sesión" type="submit" className="sign-in_btn">
                   <span>Iniciar sesión</span>
                 </button>
 
@@ -190,7 +190,7 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
                   <hr className="line" />
                 </div>
                 <span className="note">¿No tienes cuenta? Haz click en el botón para registrarte</span>
-                <button title="Sign In" type="submit" className="sign-in_apl">
+                <button title="Registrate aquí" type="submit" className="sign-in_apl">
                   <Link to={"/register"} className="registerLink">Registrate aquí</Link>
                 </button>
               </>

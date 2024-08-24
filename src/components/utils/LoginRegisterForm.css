@@ -61,6 +61,12 @@
   gap: 5px;
   cursor: pointer;
 }
+.input_container p {
+  margin-bottom: 2px;
+}
+.input_container p:last-child {
+  margin-bottom: 10px;
+}
 
 .icon {
   width: 20px;

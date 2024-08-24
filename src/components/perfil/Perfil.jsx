@@ -126,7 +126,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
       [name]: value,
     });
 
-    setChanges(false);
+    setChanges(true);
   };
 
   const handleImageClick = () => {
@@ -144,7 +144,8 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
   const handleConfirmClick = async () => {
     try {
       await UserServices.updateUser(user.idUser, inputDataEdit, token).then((response) => {
-        if (response.status === 200) {
+        if (response?.status === 200) {
+          localStorage.setItem("token", response.data.data)
           toast.success(`Datos actualizados correctamente`, {
             position: "top-right",
             autoClose: 2000,
@@ -154,8 +155,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
             draggable: true,
             progress: undefined,
             theme: "light",
-          });
-
+          });   
           setUser({
             ...user,
             name: inputDataEdit.name,
@@ -163,15 +163,37 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
           });
           setIsEditing(false);
           celarInputs();
-          setChanges(false);  // Reset changes after saving
+          setChanges(false);  
+        }else{
+          toast.error(response?.response?.data?.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       }).catch((error) => {
+
+      }).finally(() =>{
 
       });
     } catch (error) {
 
     }
   };
+
+  useEffect(() => {
+    setInputDataEdit({
+        name: user.name,
+        phone: user.phone,
+        confirmPassword: "",
+        password: ""
+    });
+}, [user]);
 
   const handleCancelClick = () => {
     setInputDataEdit(originalUserData);
@@ -203,7 +225,7 @@ export const Perfil = ({ user, setUser, token, setToken }) => {
           <div className='infoProfile'>
             <div className='input_container'>
               <p>
-                <span>Nombre: </span>
+                <span>Nombre y apellido/s: </span>
                 {isEditing ?
                   <input
                     onChange={handleOnChange}

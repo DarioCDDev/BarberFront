@@ -18,8 +18,9 @@ function Navbar({ user }) {
       <nav ref={navRef}>
         {user?.rolId?.idRol === 1 ?
           <>
-          <Link to={"/"} onClick={closeNavbar}>Inicio</Link>
-          <Link to={"/perfil"} onClick={closeNavbar}>Perfil</Link>
+            <Link to={"/"} onClick={closeNavbar}>Inicio</Link>
+            <Link to={"/perfil"} onClick={closeNavbar}>Perfil</Link>
+            <Link to={`/pedirCita/${user.idUser}/calendar`} onClick={closeNavbar}>Pedir cita</Link>
           </>
           :
           <>

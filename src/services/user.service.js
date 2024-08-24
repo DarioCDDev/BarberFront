@@ -1,6 +1,16 @@
 import axios from 'axios';
 import { API_URL } from './apiUrl';
 
+
+const healtcheck = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/public/healtcheck`)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 const login = async (data, setToken) => {
   try {
     const response = await axios.post(`${API_URL}/login`, {
@@ -64,7 +74,7 @@ const getUserDataWithToken = async (token) => {
 
     return response
   } catch (error) {
-
+    return error
   }
 }
 
@@ -161,14 +171,28 @@ const verifyAccount = async (email, code, token) => {
   }
 }
 
+const getUserByRolId = async (rolId, token) => {
+  try {
+    const response = await axios.get(`${API_URL}/public/user/rol`,
+      {
+        params: {
+          rolId: rolId
+        }
+      },
+    );
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
 
 const resendCode = async (email, token) => {
-  console.log(token);
-  
+
   try {
     const response = await axios.get(`${API_URL}/public/resendcode`,
       {
-        params:{
+        params: {
           email: email
         }
       },
@@ -206,6 +230,7 @@ const deleteUser = async (id, token) => {
 
 
 const UserServices = {
+  healtcheck,
   login,
   register,
   getUserDataWithToken,
@@ -215,7 +240,8 @@ const UserServices = {
   updateUser,
   verifyAccount,
   resendCode,
-  deleteUser
+  deleteUser,
+  getUserByRolId
 };
 
 export default UserServices;

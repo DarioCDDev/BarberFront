@@ -13,6 +13,7 @@ import Navbar from '../header/Navbar';
 import { Perfil } from '../perfil/Perfil';
 import BarberHome from '../barberHome/BarberHome';
 import Verify from '../verify/Verify';
+import BarberSelectAppointment from '../pedirCita/BarberSelectAppointment';
 
 const BarberApp = () => {
   const [token, setToken] = useState(null);
@@ -21,11 +22,32 @@ const BarberApp = () => {
   const getUserInfo = async (token) => {
     try {
       const response = await UserServices.getUserDataWithToken(token);
+      if (response?.response?.status === 401) {
+        localStorage.clear()
+        window.location.reload()
+        return
+      } 
       setUser(response.data);
     } catch (error) {
+      
       console.error("Error fetching user data:", error);
     }
   }
+
+  const healtcheck = async() => {
+    try {
+      await UserServices.healtcheck();
+    } catch (error) {
+      return error
+    }
+  }
+
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      healtcheck()
+    }, 120000)
+    return () => clearInterval(intervalo);
+  }, [])
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -37,7 +59,6 @@ const BarberApp = () => {
 
   useEffect(() => {
     if (token) {
-      
       getUserInfo(token);
     }
   }, [token]);
@@ -60,7 +81,7 @@ const BarberApp = () => {
           </>
         ) : (
           /* Con token */
-          !user.verify ? (
+          !user?.verify ? (
             <>
               <Route path="/verify" element={<Verify user={user} token={token} />}></Route>
               <Route path="*" element={<Navigate to="/verify" />} />
@@ -71,6 +92,7 @@ const BarberApp = () => {
               <>
                 <Route path="/" element={<BarberHome user={user} token={token} />}></Route>
                 <Route path="/perfil" element={<Perfil setToken={setToken} user={user} token={token} setUser={setUser} />}></Route>
+                <Route path="/pedirCita/:idBarber/calendar" element={<BarberSelectAppointment token={token} user={user} />}></Route>
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             ) : (
