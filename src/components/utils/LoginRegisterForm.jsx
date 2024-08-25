@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
 import './LoginRegisterForm.css';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Loader from './Loader';
 
 
 const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, emailError, phoneError, passwordError, confirmPasswordError, isLoading }) => {
+  const navigate = useNavigate();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const handleRegisterClick = (e) => {
+    e.preventDefault(); // Evita que el formulario se envíe
+    navigate('/register'); // Redirige al formulario de registro
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -190,8 +196,8 @@ const LoginRegisterForm = ({ option, handleOnChange, handleOnSubmit, nameError, 
                   <hr className="line" />
                 </div>
                 <span className="note">¿No tienes cuenta? Haz click en el botón para registrarte</span>
-                <button title="Registrate aquí" type="submit" className="sign-in_apl">
-                  <Link to={"/register"} className="registerLink">Registrate aquí</Link>
+                <button title="Registrate aquí" className="sign-in_apl" onClick={handleRegisterClick}>
+                  <span className="registerLink">Registrate aquí</span>
                 </button>
               </>
           }

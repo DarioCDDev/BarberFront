@@ -9,6 +9,7 @@ const Verify = ({ user, token }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [inputData, setInputData] = useState([]);
   const [codeError, setCodeError] = useState(false);
+  let contador = 0
 
   const navigate = useNavigate();
 
@@ -39,6 +40,24 @@ const Verify = ({ user, token }) => {
   const resendCode = async (e) => {
     e.preventDefault();
     await UserServices.resendCode(user.sub, token).then((response) => {
+      contador += 1
+      if (contador > 1) {
+        Swal.fire({
+          title: "Es posible que el correo introducido no exista",
+          text: `Hemos enviado varias veces el correo de vrificación a: ${user.sub}. Si está seguro de que es su correo, póngase en contacto con nosotros enviando un correo a [cuenta]. En caso contrario, si se confundió al introducir el correo, haga clic en 'Cerrar cuenta'.`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Cerrar cuenta"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await deleteUser();
+          }
+        });
+        return
+      }
       toast.success("Código reenviado exitosamente", {
         position: "top-right",
         autoClose: 2000,

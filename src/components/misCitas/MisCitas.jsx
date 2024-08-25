@@ -5,13 +5,16 @@ import "./MisCitas.css"
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import PedirCitaServices from '../../services/pedirCita.service'
+import Loader from '../utils/Loader'
 
 const MisCitas = ({ token, user }) => {
 
   const [appointments, setAppointments] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const getActiveAppointments = async () => {
     try {
+      setIsLoading(true)
       const response = await UserServices.getActiveAppointments(user, token)
       let sortedAppointments = response.data;
 
@@ -30,6 +33,8 @@ const MisCitas = ({ token, user }) => {
       setAppointments(sortedAppointments);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -43,6 +48,7 @@ const MisCitas = ({ token, user }) => {
       "name": "Eliminado"
     }
     try {
+      setIsLoading(true)
       const response = await PedirCitaServices.changeAppointmentStatus(token, id, status);
 
       if (response.status === 200) {
@@ -68,12 +74,16 @@ const MisCitas = ({ token, user }) => {
         draggable: true,
         progress: undefined,
         theme: "light",
+      }).finally(() => {
+        setIsLoading(false)
       });
     }
   }
 
   return (
     <div className="cards">
+      <Loader
+        isLoading={isLoading} />
       {appointments.length >= 1 ? (
         appointments.map((appointment, index) => {
           return (

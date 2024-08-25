@@ -5,7 +5,7 @@ const Contacto = () => {
     <section id="contacto-section" style={{ padding: '20px', textAlign: 'center' }}>
       <h3>Contacto</h3>
       <p>Teléfono: <a href="tel:+1234567890">+1 234 567 890</a></p>
-      <p>Email: <a href="mailto:info@savierbarber.com">jpbarber@gmail.com</a></p>
+      <p>Email: <a href="mailto:info@savierbarber.com">dcbarber@gmail.com</a></p>
       <div style={{ marginTop: '20px' }}>
         <h3>Encuéntranos en Google Maps</h3>
         <iframe

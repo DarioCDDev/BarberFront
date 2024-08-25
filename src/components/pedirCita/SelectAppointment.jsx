@@ -236,7 +236,7 @@ const SelectAppointment = ({ token, user }) => {
                     <span>{`Servicio: `}</span>
                     <span>{`${selectedServices !== "" ? `${selectedServices.name} - ${selectedServices.price}€` : "Sin seleccionar"}`}</span>
                   </div>
-                  <div>
+                  <div className='observationContainer'>
                     <span>{`Observaciones: `}</span>
                     <textarea onChange={(e) => setMessage(e.target.value)
                     }></textarea>
@@ -264,7 +264,7 @@ const SelectAppointment = ({ token, user }) => {
               <h5>Selecciona un servicio</h5>
               <div className='cardContainer'>
                 {services.map((service, index) => (
-                  <div key={index} className={`card ${(selectedService === index) && "selectedCard"}`}
+                  <div key={index} className={`card card-selected-animated ${(selectedService === index) && "selectedCard"}`}
                     onClick={() => handleServiceClick(index, service)
                     }
                   >

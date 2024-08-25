@@ -5,6 +5,14 @@
   padding: 20px;
   flex-direction: column;
 }
+.observationContainer{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+.observationContainer textarea{
+  padding: 5px;
+}
 
 .calendar-container {
   width: 100%;
@@ -124,8 +132,16 @@
 /* Estilos opcionales para el loader */
 .loader-spinner {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.loader-spinner h2{
+  color: white;
+  background-color: black;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 

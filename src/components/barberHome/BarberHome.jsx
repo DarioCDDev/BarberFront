@@ -8,6 +8,7 @@ import formatDateInSpanish from '../utils/formatDateInSpanish';
 import PedirCitaServices from '../../services/pedirCita.service';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import Loader from '../utils/Loader';
 
 const BarberHome = ({ user, token }) => {
   const [appointments, setAppointments] = useState([]);
@@ -15,10 +16,16 @@ const BarberHome = ({ user, token }) => {
   const [showModal, setShowModal] = useState(false);
   const [calendarView, setCalendarView] = useState(Views.MONTH); // Estado para controlar la vista del calendario
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false)
 
   const getAllAppointments = async () => {
+    setIsLoading(true)
     await BarberService.getAllAppointments(user, token).then((response) => {
       setAppointments(response.data);
+    }).catch((error) => {
+
+    }).finally(() => {
+      setIsLoading(false)
     });
   };
 
@@ -56,8 +63,6 @@ const BarberHome = ({ user, token }) => {
             progress: undefined,
             theme: "light",
           });
-
-        // Actualizar las citas después de cambiar el estado
         getAllAppointments();
       }
     } catch (error) {
@@ -146,7 +151,7 @@ const BarberHome = ({ user, token }) => {
   const completeButton = () => {
     Swal.fire({
       title: "¿Seguro que quieres marcar como completada la cita?",
-      text: "Una vez marcada como completada no podrá aplcar mas acciones sobre la cita",
+      text: "Una vez marcada como completada no podrá aplicar mas acciones sobre la cita",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -173,7 +178,7 @@ const BarberHome = ({ user, token }) => {
   const cancelButton = () => {
     Swal.fire({
       title: "¿Seguro que quieres eliminar la cita?",
-      text: "Una vez eliminada no podrá aplcar mas acciones sobre la cita",
+      text: "Una vez eliminada no podrá aplicar mas acciones sobre la cita",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -199,6 +204,7 @@ const BarberHome = ({ user, token }) => {
 
   return (
     <div className="main-content-home" style={{ height: "100vh", width: "100vw" }}>
+      <Loader isLoading={isLoading} />
       <Calendar
         localizer={localizer}
         events={events}

@@ -14,7 +14,7 @@ function Navbar({ user }) {
 
   return (
     <header>
-      <h1>JPBarber</h1>
+      <h1>DCBarber</h1>
       <nav ref={navRef}>
         {user?.rolId?.idRol === 1 ?
           <>
